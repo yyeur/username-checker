@@ -1,8 +1,6 @@
 import requests
 import random
 import string
-import customtkinter as ctk
-from bs4 import BeautifulSoup
 
 # Generate a unique random username (5 characters)
 def generate_username():
@@ -44,60 +42,28 @@ def check_username_availability(username):
 
     return available, taken
 
-# Search function for the UI
-def search_username():
-    username = entry.get().strip()
+# CLI Interface
+def main():
+    print("\n🔍 Username Availability Checker 🔍")
+    username = input("Enter username (or press Enter to generate one): ").strip()
+
     if not username:
         username = generate_username()
-        entry.delete(0, "end")
-        entry.insert(0, username)
+        print(f"Generated Username: {username}")
 
-    result_textbox.configure(state="normal")
-    result_textbox.delete("1.0", "end")
-    result_textbox.insert("end", f"🔍 Checking: {username}\n\n")
+    print("\nChecking availability, please wait...\n")
 
     available, taken = check_username_availability(username)
 
     if available:
-        result_textbox.insert("end", "✅ Available on:\n", "available")
+        print("✅ Available on:")
         for platform in available:
-            result_textbox.insert("end", f"  - {platform}\n", "available")
-    else:
-        result_textbox.insert("end", "❌ Not available on any platform.\n", "taken")
+            print(f"  - {platform}")
 
     if taken:
-        result_textbox.insert("end", "\n🔴 Taken on:\n", "taken")
+        print("\n❌ Taken on:")
         for platform in taken:
-            result_textbox.insert("end", f"  - {platform}\n", "taken")
+            print(f"  - {platform}")
 
-    result_textbox.configure(state="disabled")
-
-# Set up the UI
-ctk.set_appearance_mode("System")  # Dark/Light mode based on system settings
-ctk.set_default_color_theme("blue")  # Change to "dark-blue" for a different look
-
-root = ctk.CTk()
-root.title("Username Checker")
-root.geometry("400x500")
-root.resizable(False, False)
-
-# UI elements
-title_label = ctk.CTkLabel(root, text="🔍 Username Availability Checker", font=("Arial", 18, "bold"))
-title_label.pack(pady=10)
-
-entry = ctk.CTkEntry(root, placeholder_text="Enter username or leave blank", font=("Arial", 14))
-entry.pack(pady=10)
-
-btn_search = ctk.CTkButton(root, text="🔍 Search", font=("Arial", 14), command=search_username)
-btn_search.pack(pady=5)
-
-result_textbox = ctk.CTkTextbox(root, font=("Arial", 12), height=250, width=350)
-result_textbox.pack(pady=10)
-result_textbox.configure(state="disabled")
-
-# Text colors
-result_textbox.tag_config("available", foreground="green")
-result_textbox.tag_config("taken", foreground="red")
-
-# Run the UI
-root.mainloop()
+if __name__ == "__main__":
+    main()
