@@ -1,6 +1,7 @@
 import requests
 import random
 import string
+import time
 
 # Generate a unique random username (5 characters)
 def generate_username():
@@ -42,28 +43,27 @@ def check_username_availability(username):
 
     return available, taken
 
+# Keep generating usernames until we find one available on all platforms
+def find_available_username():
+    while True:
+        username = generate_username()
+        print(f"\n🔍 Checking username: {username} ...")
+
+        available, taken = check_username_availability(username)
+
+        if len(taken) == 0:  # Username is available on all platforms
+            print(f"\n✅ FOUND! Username '{username}' is available on all platforms! 🎉")
+            return username
+        else:
+            print(f"❌ Username '{username}' is taken on {len(taken)} platforms. Retrying...\n")
+            time.sleep(1)  # Avoid sending too many requests too fast
+
 # CLI Interface
 def main():
-    print("\n🔍 Username Availability Checker 🔍")
-    username = input("Enter username (or press Enter to generate one): ").strip()
+    print("\n🔍 Auto Username Generator & Checker 🔍")
+    print("🔄 Generating usernames until we find one available on ALL platforms...\n")
 
-    if not username:
-        username = generate_username()
-        print(f"Generated Username: {username}")
-
-    print("\nChecking availability, please wait...\n")
-
-    available, taken = check_username_availability(username)
-
-    if available:
-        print("✅ Available on:")
-        for platform in available:
-            print(f"  - {platform}")
-
-    if taken:
-        print("\n❌ Taken on:")
-        for platform in taken:
-            print(f"  - {platform}")
+    find_available_username()
 
 if __name__ == "__main__":
     main()
