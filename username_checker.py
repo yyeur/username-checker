@@ -4,7 +4,7 @@ import string
 import time
 import concurrent.futures
 
-# توليد اسم مستخدم مميز بأحرف وأرقام ورموز، بطول 3 إلى 6 حروف
+# توليد اسم مستخدم عشوائي بأحرف وأرقام ورموز، بطول 3 إلى 6 أحرف
 def generate_username():
     patterns = [
         "{}{}", "{}_{}", "{}.{}", "{}{}{}", "{}{}{}", "{}_{}{}", "{}{}_.{}", "{}.{}_{}"
@@ -14,9 +14,9 @@ def generate_username():
     digits = string.digits
     special_chars = "_."
 
-    length = random.randint(3, 6)  # تحديد الطول العشوائي بين 3 و6
-    parts = ''.join(random.choices(letters + digits, k=length - 1))  # الحروف والأرقام
-    special = random.choice(special_chars) if length > 3 else ""  # إضافة رمز فقط إذا كان الطول أكبر من 3
+    length = random.randint(3, 6)  # تحديد الطول بين 3 و6
+    parts = ''.join(random.choices(letters + digits, k=length - 1))  # حروف وأرقام
+    special = random.choice(special_chars) if length > 3 else ""  # إضافة رمز إذا كان الطول أكبر من 3
 
     pattern = random.choice(patterns)
     return pattern.format(parts, special)
@@ -63,7 +63,7 @@ def check_username_availability(username):
 
     return available, taken
 
-# البحث عن اسم مستخدم متاح على جميع المنصات
+# البحث المستمر عن اسم مستخدم متاح بالكامل
 def find_available_username():
     while True:
         username = generate_username()
@@ -73,10 +73,10 @@ def find_available_username():
 
         if not taken:  # إذا كان متاحًا على كل المنصات
             print(f"\n✅ FOUND! Username '{username}' is available on all platforms! 🎉")
-            return username
+            return username  # عند العثور عليه، يتم التوقف والخروج
         else:
             print(f"❌ Username '{username}' is taken on {len(taken)} platforms. Retrying...\n")
-            time.sleep(0.5)  # تقليل زمن الانتظار بين المحاولات
+            time.sleep(0.3)  # تقليل زمن الانتظار بين المحاولات
 
 # الواجهة الرئيسية
 def main():
@@ -86,4 +86,4 @@ def main():
     find_available_username()
 
 if __name__ == "__main__":
-    main() 
+    main()
