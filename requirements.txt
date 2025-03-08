@@ -1,3 +1,5 @@
-requests
-beautifulsoup4
-customtkinter
+import requests
+import random
+import string
+import time
+import concurrent.futures
